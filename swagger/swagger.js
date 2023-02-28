@@ -94,5 +94,6 @@
       "type": "object"
     }
   },
-  "securityDefinitions": {}
+  "securityDefinitions": {},
+  "host": "6me96m3are.execute-api.eu-west-1.amazonaws.com/dev"
 };
