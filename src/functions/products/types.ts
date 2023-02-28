@@ -1,5 +1,4 @@
-import { BaseItem } from '../../types/BaseModel';
-import { FromSchema } from 'json-schema-to-ts';
+export { ProductType } from '../../models';
 
 export const Product = {
   type: 'object',
@@ -12,8 +11,6 @@ export const Product = {
   },
   required: ['id', 'title', 'count', 'price', 'description'],
 } as const;
-
-export type ProductType = FromSchema<typeof Product> & BaseItem;
 
 export const GetProductsListSchema = {
   type: 'array',

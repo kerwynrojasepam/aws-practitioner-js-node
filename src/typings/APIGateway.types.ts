@@ -6,7 +6,7 @@ import type {
 } from 'aws-lambda';
 
 export interface Result extends Omit<APIGatewayProxyResult, 'body'> {
-  body: Record<string, unknown>;
+  body: string | Record<string, unknown>;
 }
 
 export interface BodyParams<P extends Record<string, unknown>> {
@@ -26,7 +26,7 @@ export type Params<P extends Record<string, unknown>> =
   | QueryParams<P>
   | PathParams<P>;
 
-interface EventParams<EP extends Params<Record<string, unknown>>>
+export interface EventParams<EP extends Params<Record<string, unknown>>>
   extends Omit<
     APIGatewayProxyEvent,
     'body' | 'pathParameters' | 'queryStringParameters'

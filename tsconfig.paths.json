@@ -6,8 +6,9 @@
       "@functions/*": ["src/functions/*"],
       "@libs/*": ["src/libs/*"],
       "@services/*": ["src/services/*"],
-      "@types/*": ["src/types/*"],
-      "@mocks/*": ["mocks/*"]
+      "@typings/*": ["src/typings/*"],
+      "@mocks/*": ["mocks/*"],
+      "@models/*": ["src/models/*"]
     }
   }
 }

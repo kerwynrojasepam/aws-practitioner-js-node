@@ -1,7 +1,7 @@
 // import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 // import type { FromSchema } from 'json-schema-to-ts';
 import { HEADERS } from '@constants/headers';
-import type { Handler, Params } from '@types/APIGateway.types';
+import type { Handler, Params } from '@typings/APIGateway.types';
 import middy from '@middy/core';
 import middyJsonBodyParser from '@middy/http-json-body-parser';
 

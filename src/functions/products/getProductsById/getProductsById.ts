@@ -4,10 +4,10 @@ import {
   createAPIGatewayProxyHandler,
   formatJSONResponse,
 } from '@libs/api-gateway';
-import { Error } from 'src/constants/errors';
-import { PathParams } from '@types/APIGateway.types';
+import { ErrorMessage } from '@constants/errors';
+import { PathParams } from '@typings/APIGateway.types';
 
-export const getProductById = createAPIGatewayProxyHandler<
+export const getProductsById = createAPIGatewayProxyHandler<
   PathParams<Pick<ProductType, 'id'>>
 >(async event => {
   const paramId = event.pathParameters.id;
@@ -18,20 +18,16 @@ export const getProductById = createAPIGatewayProxyHandler<
 
     if (!product) {
       return formatJSONResponse({
-        body: {
-          message: Error.PRODUCT_NOT_FOUND,
-        },
+        message: ErrorMessage.PRODUCT_NOT_FOUND,
       });
     }
 
     return formatJSONResponse(product, 200);
   } catch (error) {
     return formatJSONResponse({
-      body: {
-        message: Error.SERVER_ERROR,
-      },
+      message: ErrorMessage.SERVER_ERROR,
     });
   }
 });
 
-export default getProductById;
+export default getProductsById;

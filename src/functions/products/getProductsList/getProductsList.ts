@@ -1,6 +1,6 @@
 import { ProductService } from '@services/products/ProductService';
 import { formatJSONResponse } from '@libs/api-gateway';
-import { Error } from 'src/constants/errors';
+import { ErrorMessage } from '@constants/errors';
 
 export const getProductsList = async () => {
   const productsService = new ProductService();
@@ -10,18 +10,14 @@ export const getProductsList = async () => {
 
     if (!products.length) {
       return formatJSONResponse({
-        body: {
-          message: Error.PRODUCTS_NOT_FOUND,
-        },
+        message: ErrorMessage.PRODUCTS_NOT_FOUND,
       });
     }
 
     return formatJSONResponse(products, 200);
   } catch (error) {
     return formatJSONResponse({
-      body: {
-        message: Error.SERVER_ERROR,
-      },
+      message: ErrorMessage.SERVER_ERROR,
     });
   }
 };

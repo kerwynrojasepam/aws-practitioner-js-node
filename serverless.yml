@@ -8,37 +8,37 @@ provider:
   stage: dev
 
 plugins:
-  - serverless-functions-base-path
+  # - serverless-functions-base-path
+  - serverless-auto-swagger
   - serverless-esbuild
-  # - serverless-webpack
-  # - serverless-auto-swagger
   - serverless-offline
 custom:
   # webpack:
   #   webpackConfig: webpack.config.js
   #   includeModules: true
-  functionsBasePath: src/functions
-  # autoswagger:
-  #   apiType: "httpApi"
-  #   generateSwaggerOnDeploy: true
-  #   typefiles: ["./src/models/types.d.ts"]
-  #   title: "aws-practitioner-js-4-node"
-    # host: "z93dh321nh.execute-api.us-east-1.amazonaws.com/dev"
-  esbuild:
-    bundle: true
-    minify: false
-    sourcemap: true
-    exclude:
-      - aws-sdk
-    target: node14
-    define:
-      require.resolve: undefined
-    platform: node
-    concurrency: 10
+  # functionsBasePath: src/functions
+  autoswagger:
+    apiType: "httpApi"
+    generateSwaggerOnDeploy: true
+    typefiles: ["./src/models/types.d.ts"]
+    title: "aws-practitioner-js-4-node"
+    # host: ""
+  # esbuild:
+  #   entryPoints: ./src/index.ts
+  #   bundle: true
+  #   minify: false
+  #   sourcemap: true
+  #   exclude:
+  #     - aws-sdk
+  #   target: node14
+  #   define:
+  #     require.resolve: undefined
+  #   platform: node
+  #   concurrency: 10
 
 functions:
   getProductsList:
-    handler: products/handler.getProductsList
+    handler: src/functions/products/handler.getProductsList
     events:
       - http:
           path: products
@@ -49,8 +49,8 @@ functions:
           # request:
           #   schema: ${file(products/getProductsList.json)}
 
-  getProductById:
-    handler: products/handler.getProductById
+  getProductsById:
+    handler: src/functions/products/handler.getProductsById
     events:
       - http:
           path: products/{id}

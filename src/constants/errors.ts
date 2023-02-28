@@ -1,5 +1,5 @@
-export const Error = {
+export const ErrorMessage = {
   PRODUCTS_NOT_FOUND: 'Products not found',
   PRODUCT_NOT_FOUND: 'Product not found',
-  SERVER_ERROR: 'Server error',
+  SERVER_ERROR: 'Internal Server Error',
 };

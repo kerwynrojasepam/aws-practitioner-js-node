@@ -1,4 +1,4 @@
-import { BaseItem } from './../../types/BaseModel';
+import { BaseItem } from '../../typings/BaseModel';
 
 export class BaseService<T extends BaseItem> {
   private _mockListData: T[];
@@ -11,7 +11,7 @@ export class BaseService<T extends BaseItem> {
     return this._mockListData;
   }
 
-  public findById(id: BaseItem['id']) {
+  public async findById(id: BaseItem['id']): Promise<T | undefined> {
     return this._mockListData.find(item => item.id === id);
   }
 }
