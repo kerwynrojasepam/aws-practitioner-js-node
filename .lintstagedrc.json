@@ -1,5 +1,5 @@
 {
-  "*.ts": [
-    "eslint --ignore-path .gitignore --fix src"
+  "src/**/*.ts": [
+    "eslint --fix src"
   ]
 }

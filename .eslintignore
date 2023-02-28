@@ -2,3 +2,4 @@ node_modules
 serverless.yml
 swagger/*
 tsconfig.json
+**/*.js
