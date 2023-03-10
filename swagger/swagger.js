@@ -38,12 +38,6 @@
         ],
         "parameters": [
           {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "path",
             "required": true,

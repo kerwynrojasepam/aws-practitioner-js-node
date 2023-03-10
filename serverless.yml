@@ -58,7 +58,7 @@ functions:
           request:
             parameters:
               paths:
-                productId: true
+                id: true
           cors:
             origin: "*"
             allowCredentials: false
