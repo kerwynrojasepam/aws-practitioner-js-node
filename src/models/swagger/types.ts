@@ -1,5 +1,3 @@
-export { ProductType } from '../../models';
-
 export const Product = {
   type: 'object',
   properties: {
@@ -15,4 +13,15 @@ export const Product = {
 export const GetProductsListSchema = {
   type: 'array',
   items: [Product],
+} as const;
+
+export const CreateProductPayload = {
+  type: 'object',
+  properties: {
+    title: { type: 'string' },
+    count: { type: 'number' },
+    price: { type: 'number' },
+    description: { type: 'string' },
+  },
+  required: ['title', 'count', 'price', 'description'],
 } as const;
