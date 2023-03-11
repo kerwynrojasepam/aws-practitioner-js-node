@@ -6,6 +6,25 @@
     "version": "1"
   },
   "paths": {
+    "/scripts/loadInitialData": {
+      "get": {
+        "summary": "loadInitialData",
+        "description": "",
+        "operationId": "loadInitialData.get.scripts/loadInitialData",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      }
+    },
     "/products": {
       "get": {
         "summary": "getProductsList",
@@ -18,6 +37,33 @@
           "application/json"
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "post": {
+        "summary": "createProduct",
+        "description": "",
+        "operationId": "createProduct.post.products",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateProductPayload"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response"
@@ -53,26 +99,26 @@
     }
   },
   "definitions": {
-    "ProductType": {
+    "Product": {
       "properties": {
         "id": {
-          "title": "ProductType.id",
+          "title": "Product.id",
           "type": "string"
         },
         "title": {
-          "title": "ProductType.title",
+          "title": "Product.title",
           "type": "string"
         },
         "count": {
-          "title": "ProductType.count",
+          "title": "Product.count",
           "type": "number"
         },
         "price": {
-          "title": "ProductType.price",
+          "title": "Product.price",
           "type": "number"
         },
         "description": {
-          "title": "ProductType.description",
+          "title": "Product.description",
           "type": "string"
         }
       },
@@ -84,8 +130,30 @@
         "description"
       ],
       "additionalProperties": false,
-      "title": "ProductType",
+      "title": "Product",
       "type": "object"
+    },
+    "Stock": {
+      "properties": {
+        "productId": {
+          "title": "Stock.productId",
+          "type": "string"
+        },
+        "count": {
+          "title": "Stock.count",
+          "type": "number"
+        }
+      },
+      "required": [
+        "productId",
+        "count"
+      ],
+      "additionalProperties": false,
+      "title": "Stock",
+      "type": "object"
+    },
+    "CreateProductPayload": {
+      "title": "CreateProductPayload"
     }
   },
   "securityDefinitions": {},

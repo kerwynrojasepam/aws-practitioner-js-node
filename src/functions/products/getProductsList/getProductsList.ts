@@ -3,10 +3,11 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import { ErrorMessage } from '@constants/errors';
 
 export const getProductsList = async () => {
+  console.log('getProductsList');
   const productsService = new ProductService();
 
   try {
-    const products = await productsService.findAll();
+    const products = await productsService.findAllWithStock();
 
     if (!products.length) {
       return formatJSONResponse({
@@ -16,6 +17,7 @@ export const getProductsList = async () => {
 
     return formatJSONResponse(products, 200);
   } catch (error) {
+    console.error('getProductsList', error);
     return formatJSONResponse({
       message: ErrorMessage.SERVER_ERROR,
     });

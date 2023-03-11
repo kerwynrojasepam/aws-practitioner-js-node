@@ -1,3 +1,2 @@
-export interface BaseItem {
-  id: string;
-}
+export type UUID = string;
+export type BaseItem = Record<string, any>;

@@ -6,6 +6,23 @@ provider:
   runtime: nodejs14.x
   region: eu-west-1
   stage: dev
+  environment: ${file(.env.${opt:stage, self:provider.stage}.json)}
+  httpApi:
+    cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.PRODUCTS_TABLE}"
+            - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.STOCKS_TABLE}"
 
 plugins:
   # - serverless-functions-base-path
@@ -20,7 +37,7 @@ custom:
   autoswagger:
     apiType: "httpApi"
     generateSwaggerOnDeploy: true
-    typefiles: ["./src/models/types.d.ts"]
+    typefiles: ["./src/models/models.types.ts", "./src/typings/http.types.ts"]
     title: "aws-practitioner-js-4-node"
     useStage: true
     host: 6me96m3are.execute-api.eu-west-1.amazonaws.com/${sls:stage}
@@ -37,17 +54,21 @@ custom:
     concurrency: 10
 
 functions:
+  loadInitialData:
+    handler: src/functions/scripts/handler.loadInitialData
+    events:
+      - http:
+          path: scripts/loadInitialData
+          method: get
+          cors: true
+
   getProductsList:
     handler: src/functions/products/handler.getProductsList
     events:
       - http:
           path: products
           method: get
-          cors:
-            origin: "*"
-            allowCredentials: false
-          # request:
-          #   schema: ${file(products/getProductsList.json)}
+          cors: true
 
   getProductsById:
     handler: src/functions/products/handler.getProductsById
@@ -55,10 +76,18 @@ functions:
       - http:
           path: products/{id}
           method: get
+          cors: true
           request:
             parameters:
               paths:
                 id: true
-          cors:
-            origin: "*"
-            allowCredentials: false
+
+  createProduct:
+    handler: src/functions/products/handler.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          bodyType: 'CreateProductPayload'
+
