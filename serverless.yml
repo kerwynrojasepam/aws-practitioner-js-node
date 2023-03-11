@@ -1,0 +1,64 @@
+service: aws-practitioner-js-4-node
+app: aws-practitioner-js-4-node
+frameworkVersion: "3"
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-1
+  stage: dev
+
+plugins:
+  # - serverless-functions-base-path
+  - serverless-auto-swagger
+  - serverless-esbuild
+  - serverless-offline
+custom:
+  # webpack:
+  #   webpackConfig: webpack.config.js
+  #   includeModules: true
+  # functionsBasePath: src/functions
+  autoswagger:
+    apiType: "httpApi"
+    generateSwaggerOnDeploy: true
+    typefiles: ["./src/models/types.d.ts"]
+    title: "aws-practitioner-js-4-node"
+    useStage: true
+    host: 6me96m3are.execute-api.eu-west-1.amazonaws.com/${sls:stage}
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude:
+      - aws-sdk
+    target: node14
+    define:
+      require.resolve: undefined
+    platform: node
+    concurrency: 10
+
+functions:
+  getProductsList:
+    handler: src/functions/products/handler.getProductsList
+    events:
+      - http:
+          path: products
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+          # request:
+          #   schema: ${file(products/getProductsList.json)}
+
+  getProductsById:
+    handler: src/functions/products/handler.getProductsById
+    events:
+      - http:
+          path: products/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+            allowCredentials: false
