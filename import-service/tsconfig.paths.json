@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@constants/*": ["src/constants/*"],
+      "@functions/*": ["src/functions/*"],
+      "@libs/*": ["src/libs/*"],
+      "@services/*": ["src/services/*"],
+      "@typings/*": ["src/typings/*"],
+    }
+  }
+}
