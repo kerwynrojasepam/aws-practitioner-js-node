@@ -1,4 +1,4 @@
-import { ProductType } from '@functions/products/types';
+import { Product } from '@models/models.types';
 import { ProductService } from '@services/products/ProductService';
 import {
   createAPIGatewayProxyHandler,
@@ -8,13 +8,14 @@ import { ErrorMessage } from '@constants/errors';
 import { PathParams } from '@typings/APIGateway.types';
 
 export const getProductsById = createAPIGatewayProxyHandler<
-  PathParams<Pick<ProductType, 'id'>>
+  PathParams<Pick<Product, 'id'>>
 >(async event => {
   const paramId = event.pathParameters.id;
+  console.log('getProductsById', paramId);
   const productsService = new ProductService();
 
   try {
-    const product = await productsService.findById(paramId);
+    const product = await productsService.findByIdWithStock(paramId);
 
     if (!product) {
       return formatJSONResponse({
@@ -24,6 +25,7 @@ export const getProductsById = createAPIGatewayProxyHandler<
 
     return formatJSONResponse(product, 200);
   } catch (error) {
+    console.error('getProductsById', error);
     return formatJSONResponse({
       message: ErrorMessage.SERVER_ERROR,
     });
