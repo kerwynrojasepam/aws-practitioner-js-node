@@ -1,13 +1,19 @@
+import * as AWSMock from 'jest-aws-sdk-mock';
+import AWS from 'aws-sdk';
 import lambdaTester from 'lambda-tester';
-import { mocked } from 'jest-mock';
+
+import { importProductsFile } from '@functions/products/importProductsFile';
 import { ErrorMessage } from '@constants/errors';
-import { ProductService } from '@services/products/ProductService';
 import { EventParams } from '@typings/APIGateway.types';
-import products from '@mocks/products.json';
-import { getProductsById } from './importProductsFile';
+
+AWSMock.setSDKInstance(AWS);
+
+jest.mock('@config/sls', () => ({
+  BUCKET_NAME: 'TEST_BUCKET_NAME',
+}));
 
 const defaultEvent: EventParams<{ pathParameters: { id: string } }> = {
-  httpMethod: 'post',
+  httpMethod: 'get',
   headers: { Authorization: 'dummyToken' },
   isBase64Encoded: false,
   path: '/change-expiry-elapsed-days',
@@ -21,46 +27,40 @@ const defaultEvent: EventParams<{ pathParameters: { id: string } }> = {
   body: null,
 };
 
-describe.only('getProductsById', () => {
-  const product = products[0];
-
-  ProductService.prototype.findById = jest.fn();
-  const productServiceMock = mocked(new ProductService());
-
-  it('should return type of function', () => {
-    expect(typeof getProductsById).toBe('function');
+describe.only('importProductsFile', () => {
+  const url = 'test_url';
+  AWSMock.mock('S3', 'getSignedUrl', (_action, _params, callback) => {
+    callback(null, url);
   });
 
-  it('should return product and statusCode 200', async () => {
-    await productServiceMock.findById.mockResolvedValue(product);
-    await lambdaTester(getProductsById)
-      .event({ ...defaultEvent, pathParameters: { id: product.id } } as any)
+  test('should return valid url and status 200', async () => {
+    await lambdaTester(importProductsFile)
+      .event({
+        ...defaultEvent,
+        queryStringParameters: { name: 'mock_test_file' },
+      } as any)
       .expectResult(result => {
         expect(result.statusCode).toBe(200);
-        expect(result.body).toBe(JSON.stringify(product));
-      });
-  });
-
-  it('should return error when product not found and statusCode 500', async () => {
-    await productServiceMock.findById.mockResolvedValue(undefined);
-    await lambdaTester(getProductsById)
-      .event({ ...defaultEvent, pathParameters: { id: product.id } } as any)
-      .expectResult(result => {
-        expect(result.statusCode).toBe(500);
         expect(result.body).toBe(
-          JSON.stringify({ message: ErrorMessage.PRODUCT_NOT_FOUND })
+          JSON.stringify({
+            url,
+          })
         );
       });
   });
 
-  it('should return Internal Server Error', async () => {
-    await productServiceMock.findById.mockRejectedValue(undefined);
-    await lambdaTester(getProductsById)
-      .event({ ...defaultEvent, pathParameters: { id: product.id } } as any)
+  test('should return error message and status 400', async () => {
+    await lambdaTester(importProductsFile)
+      .event({
+        ...defaultEvent,
+        queryStringParameters: {},
+      } as any)
       .expectResult(result => {
-        expect(result.statusCode).toBe(500);
+        expect(result.statusCode).toBe(400);
         expect(result.body).toBe(
-          JSON.stringify({ message: ErrorMessage.SERVER_ERROR })
+          JSON.stringify({
+            message: ErrorMessage.FILENAME_NOT_PROVIDED,
+          })
         );
       });
   });

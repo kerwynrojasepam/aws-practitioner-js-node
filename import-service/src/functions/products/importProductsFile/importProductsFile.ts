@@ -1,6 +1,6 @@
 import { S3_FOLDERS } from '@constants/folders';
 import { BUCKET_NAME } from '@config/sls';
-import { s3Client } from '@services/S3Client';
+import { getS3Client } from '@services/S3Client';
 import {
   createAPIGatewayProxyHandler,
   formatJSONResponse,
@@ -12,12 +12,16 @@ export const importProductsFile = createAPIGatewayProxyHandler<
   QueryParams<{ name: string }>
 >(async event => {
   console.log('importProductsFile', event);
+  const s3Client = getS3Client();
 
   try {
     const fileName = event.queryStringParameters.name;
 
     if (!fileName) {
-      return formatJSONResponse({ message: 'File name not provided' }, 400);
+      return formatJSONResponse(
+        { message: ErrorMessage.FILENAME_NOT_PROVIDED },
+        400
+      );
     }
 
     const url = await s3Client.getSignedUrlPromise('putObject', {
@@ -29,7 +33,7 @@ export const importProductsFile = createAPIGatewayProxyHandler<
 
     if (!url) {
       return formatJSONResponse({
-        message: `Failed to retrieve file url from s3 bucket`,
+        message: ErrorMessage.FILE_URL_NOT_RETRIEVED,
       });
     }
 
@@ -37,7 +41,7 @@ export const importProductsFile = createAPIGatewayProxyHandler<
 
     return formatJSONResponse({ url }, 200);
   } catch (error) {
-    console.log('importProductsFile', error);
+    console.log('importProductsFile-ERROR', error);
     return formatJSONResponse(
       {
         message: error?.message || ErrorMessage.SERVER_ERROR,

@@ -23,6 +23,7 @@
     "@middy/input-output-logger": "^4.2.7",
     "aws-sdk": "^2.1335.0",
     "csv-parser": "^3.0.0",
+    "jest-aws-sdk-mock": "^1.0.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

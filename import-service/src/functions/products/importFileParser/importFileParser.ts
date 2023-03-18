@@ -2,12 +2,13 @@ import csv from 'csv-parser';
 
 import { S3_FOLDERS } from '@constants/folders';
 import { formatJSONResponse } from '@libs/api-gateway';
-import { s3Client } from '@services/S3Client';
+import { getS3Client } from '@services/S3Client';
 import { ErrorMessage } from '@constants/errors';
 
 export const importFileParser = async event => {
   console.log('importFileParser', event);
   const records = event?.Records;
+  const s3Client = getS3Client();
 
   try {
     for (const record of records) {
