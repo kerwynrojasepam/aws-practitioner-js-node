@@ -20,7 +20,9 @@ const config: Config = {
     "@services(.*)": ["<rootDir>/src/services/$1"],
     "@typings(.*)": ["<rootDir>/src/typings/$1"],
     "@mocks(.*)": ["<rootDir>/mocks/$1"],
-    "@models(.*)": ["<rootDir>/src/models/$1"]
+    "@models(.*)": ["<rootDir>/src/models/$1"],
+    "@config(.*)": ["<rootDir>/src/config/$1"],
+    "@errors(.*)": ["<rootDir>/src/errors/$1"]
   }
 };
 
