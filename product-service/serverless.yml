@@ -4,7 +4,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs14.x
-  region: eu-west-1
+  region: us-west-1
   stage: dev
   environment: ${file(.env.${opt:stage, self:provider.stage}.json)}
   httpApi:
@@ -23,6 +23,16 @@ provider:
           Resource:
             - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.PRODUCTS_TABLE}"
             - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.STOCKS_TABLE}"
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            - Fn::GetAtt:
+              - SQSQueue
+              - Arn
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            Ref: SNSTopic
 
 plugins:
   # - serverless-functions-base-path
@@ -40,7 +50,7 @@ custom:
     typefiles: ["./src/models/models.types.ts", "./src/typings/http.types.ts"]
     title: "aws-practitioner-js-4-node"
     useStage: true
-    host: 6me96m3are.execute-api.eu-west-1.amazonaws.com/${sls:stage}
+    host: dbxxlpoykj.execute-api.us-west-1.amazonaws.com/${sls:stage}
   esbuild:
     bundle: true
     minify: false
@@ -91,3 +101,48 @@ functions:
           cors: true
           bodyType: 'CreateProductPayload'
 
+  catalogBatchProcess:
+    handler: src/functions/products/handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt: [ SQSQueue, Arn ]
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        Endpoint: ${self:provider.environment.SUB_EMAIL_1}
+        TopicArn:
+          Ref: SNSTopic
+    SNSExpensiveProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        Endpoint: ${self:provider.environment.SUB_EMAIL_2}
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          price: [ { "numeric": [ ">=", 250 ] } ]
+  Outputs:
+    SQSQueueOutput:
+      Value:
+        Fn::GetAtt: [ SQSQueue, Arn ]
+      Export:
+        Name: SQSQueueOutput
+    SQSQueueUrlOutput:
+      Value:
+        Fn::GetAtt: [ SQSQueue, QueueUrl ]
+      Export:
+        Name: SQSQueueUrlOutput

@@ -157,5 +157,5 @@
     }
   },
   "securityDefinitions": {},
-  "host": "6me96m3are.execute-api.eu-west-1.amazonaws.com/dev"
+  "host": "dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev"
 };

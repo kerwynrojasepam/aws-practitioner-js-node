@@ -1,15 +1,106 @@
-Environment: darwin, node 16.16.0, compose 1.3.0
-Docs:        slss.io/docs-compose
-Bugs:        github.com/serverless/compose/issues
 
-Error:
-"offline" is not a global command in Serverless Framework Compose.
-Available global commands: deploy, remove, info, logs, outputs, refresh-outputs, package.
-You can run serverless-offline in each Serverless Framework service by running "serverless <service-name>:offline".
-ServerlessError: "offline" is not a global command in Serverless Framework Compose.
-Available global commands: deploy, remove, info, logs, outputs, refresh-outputs, package.
-You can run serverless-offline in each Serverless Framework service by running "serverless <service-name>:offline".
-    at ComponentsService.invokeGlobalCommand (/Users/kerwyn_rojas/Projects/EPAM/aws-practitioner-js-4/aws-practitioner-js-node/node_modules/@serverless/compose/src/ComponentsService.js:362:13)
-    at runComponents (/Users/kerwyn_rojas/Projects/EPAM/aws-practitioner-js-4/aws-practitioner-js-node/node_modules/@serverless/compose/src/index.js:138:31)
-
-Verbose logs are available in ".serverless/compose.log"
+Deploying to stage dev
+import-service › waiting
+product-service › waiting
+product-service › deploying
+product-service › Running "serverless deploy --stage dev"
+product-service › Running "serverless" from node_modules
+product-service › (node:9700) NOTE: We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.
+product-service › 
+product-service › Please migrate your code to use AWS SDK for JavaScript (v3).
+product-service › For more information, check the migration guide at https://a.co/7PzMCcy
+product-service › (Use `node --trace-warnings ...` to show where the warning was created)
+product-service › Deploying aws-practitioner-js-4-node to stage dev (us-west-1)
+product-service › Creating Swagger file...
+product-service › ✔ Service deployed to stack aws-practitioner-js-4-node-dev (50s)
+product-service › endpoints:
+product-service ›   GET - https://acr4lyyj43.execute-api.us-west-1.amazonaws.com/dev/swagger
+product-service ›   GET - https://acr4lyyj43.execute-api.us-west-1.amazonaws.com/dev/swagger.json
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/scripts/loadInitialData
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products/{id}
+product-service ›   POST - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products
+product-service › functions:
+product-service ›   loadInitialData: aws-practitioner-js-4-node-dev-loadInitialData (59 kB)
+product-service ›   getProductsList: aws-practitioner-js-4-node-dev-getProductsList (59 kB)
+product-service ›   getProductsById: aws-practitioner-js-4-node-dev-getProductsById (59 kB)
+product-service ›   createProduct: aws-practitioner-js-4-node-dev-createProduct (59 kB)
+product-service ›   catalogBatchProcess: aws-practitioner-js-4-node-dev-catalogBatchProcess (59 kB)
+product-service ›   swaggerUI: aws-practitioner-js-4-node-dev-swagger-ui (59 kB)
+product-service ›   swaggerJSON: aws-practitioner-js-4-node-dev-swagger-json (59 kB)
+product-service › Need a faster logging experience than CloudWatch? Try our Dev Mode in Console: run "serverless dev"
+product-service › Running "serverless info --verbose --stage dev"
+product-service › Running "serverless" from node_modules
+product-service › (node:9776) NOTE: We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.
+product-service › 
+product-service › Please migrate your code to use AWS SDK for JavaScript (v3).
+product-service › For more information, check the migration guide at https://a.co/7PzMCcy
+product-service › (Use `node --trace-warnings ...` to show where the warning was created)
+product-service › service: aws-practitioner-js-4-node
+product-service › stage: dev
+product-service › region: us-west-1
+product-service › stack: aws-practitioner-js-4-node-dev
+product-service › endpoints:
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/scripts/loadInitialData
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products
+product-service ›   GET - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products/{id}
+product-service ›   POST - https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev/products
+product-service › functions:
+product-service ›   loadInitialData: aws-practitioner-js-4-node-dev-loadInitialData
+product-service ›   getProductsList: aws-practitioner-js-4-node-dev-getProductsList
+product-service ›   getProductsById: aws-practitioner-js-4-node-dev-getProductsById
+product-service ›   createProduct: aws-practitioner-js-4-node-dev-createProduct
+product-service ›   catalogBatchProcess: aws-practitioner-js-4-node-dev-catalogBatchProcess
+product-service › 
+product-service › Stack Outputs:
+product-service ›   SQSQueueUrlOutput: https://sqs.us-west-1.amazonaws.com/189896290275/catalogItemsQueue
+product-service ›   SwaggerUILambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-swagger-ui:7
+product-service ›   SQSQueueOutput: arn:aws:sqs:us-west-1:189896290275:catalogItemsQueue
+product-service ›   LoadInitialDataLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-loadInitialData:6
+product-service ›   GetProductsListLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-getProductsList:7
+product-service ›   CreateProductLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-createProduct:6
+product-service ›   HttpApiId: acr4lyyj43
+product-service ›   GetProductsByIdLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-getProductsById:6
+product-service ›   ServerlessDeploymentBucketName: aws-practitioner-js-4-no-serverlessdeploymentbuck-18y2s27wyzsy1
+product-service ›   HttpApiUrl: https://acr4lyyj43.execute-api.us-west-1.amazonaws.com
+product-service ›   SwaggerJSONLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-swagger-json:7
+product-service ›   CatalogBatchProcessLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-practitioner-js-4-node-dev-catalogBatchProcess:6
+product-service ›   ServiceEndpoint: https://dbxxlpoykj.execute-api.us-west-1.amazonaws.com/dev
+product-service › deployed
+import-service › deploying
+import-service › Running "serverless deploy --stage dev"
+import-service › Running "serverless" from node_modules
+import-service › (node:9781) NOTE: We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.
+import-service › 
+import-service › Please migrate your code to use AWS SDK for JavaScript (v3).
+import-service › For more information, check the migration guide at https://a.co/7PzMCcy
+import-service › (Use `node --trace-warnings ...` to show where the warning was created)
+import-service › Deploying aws-pract-js-4-import-service to stage dev (us-west-1)
+import-service › ✔ Service deployed to stack aws-pract-js-4-import-service-dev (60s)
+import-service › endpoint: GET - https://g8scehlcli.execute-api.us-west-1.amazonaws.com/dev/import
+import-service › functions:
+import-service ›   importProductsFile: aws-pract-js-4-import-service-dev-importProductsFile (28 kB)
+import-service ›   importFileParser: aws-pract-js-4-import-service-dev-importFileParser (28 kB)
+import-service › Need a faster logging experience than CloudWatch? Try our Dev Mode in Console: run "serverless dev"
+import-service › Running "serverless info --verbose --stage dev"
+import-service › Running "serverless" from node_modules
+import-service › (node:10004) NOTE: We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.
+import-service › 
+import-service › Please migrate your code to use AWS SDK for JavaScript (v3).
+import-service › For more information, check the migration guide at https://a.co/7PzMCcy
+import-service › (Use `node --trace-warnings ...` to show where the warning was created)
+import-service › service: aws-pract-js-4-import-service
+import-service › stage: dev
+import-service › region: us-west-1
+import-service › stack: aws-pract-js-4-import-service-dev
+import-service › endpoint: GET - https://g8scehlcli.execute-api.us-west-1.amazonaws.com/dev/import
+import-service › functions:
+import-service ›   importProductsFile: aws-pract-js-4-import-service-dev-importProductsFile
+import-service ›   importFileParser: aws-pract-js-4-import-service-dev-importFileParser
+import-service › 
+import-service › Stack Outputs:
+import-service ›   ImportProductsFileLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-pract-js-4-import-service-dev-importProductsFile:10
+import-service ›   ImportFileParserLambdaFunctionQualifiedArn: arn:aws:lambda:us-west-1:189896290275:function:aws-pract-js-4-import-service-dev-importFileParser:10
+import-service ›   ServiceEndpoint: https://g8scehlcli.execute-api.us-west-1.amazonaws.com/dev
+import-service ›   ServerlessDeploymentBucketName: aws-pract-js-4-import-se-serverlessdeploymentbuck-4pqyjg9skyce
+import-service › deployed
