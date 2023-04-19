@@ -23,6 +23,11 @@ provider:
             - s3:*
           Resource:
             - "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource:
+            - Fn::ImportValue: SQSQueueOutput
 
 plugins:
   - serverless-esbuild
@@ -39,6 +44,23 @@ custom:
       require.resolve: undefined
     platform: node
     concurrency: 10
+
+resources:
+  Resources:
+    BucketPolicyPublicRead:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: ${self:provider.environment.BUCKET_NAME}
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: AllowPublicRead
+              Effect: Allow
+              Principal: {
+                "AWS": "*"
+              }
+              Action: "s3:GetObject"
+              Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
 
 functions:
   importProductsFile:

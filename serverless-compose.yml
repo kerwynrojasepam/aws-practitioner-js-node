@@ -1,6 +1,8 @@
 services:
   import-service:
     path: import-service
+    dependsOn:
+      - product-service
 
   product-service:
     path: product-service

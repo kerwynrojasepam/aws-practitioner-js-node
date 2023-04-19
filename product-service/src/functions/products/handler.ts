@@ -4,6 +4,7 @@
 export { createProduct } from './createProduct';
 export { getProductsList } from './getProductsList';
 export { getProductsById } from './getProductsById';
+export { catalogBatchProcess } from './catalogBatchProcess';
 
 // export const getProductsList = createHandler({
 //   handler: getProductsListHandler as any,
