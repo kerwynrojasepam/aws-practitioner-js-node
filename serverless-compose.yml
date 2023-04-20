@@ -1,6 +1,13 @@
 services:
   import-service:
     path: import-service
+    dependsOn:
+      - product-service
 
   product-service:
     path: product-service
+    dependsOn:
+      - authorization-service
+
+  authorization-service:
+    path: authorization-service

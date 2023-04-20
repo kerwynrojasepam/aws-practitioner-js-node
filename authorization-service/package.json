@@ -1,10 +1,11 @@
 {
-  "name": "aws-pract-js-4-import-service",
+  "name": "aws-pract-js-4-auth-service",
   "version": "1.0.0",
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.yml",
   "scripts": {
     "deploy:dev": "sls deploy --stage dev",
+    "remove:dev": "sls remove --stage dev",
     "prettier": "prettier src --write",
     "lint": "eslint --fix src",
     "prepare": "husky install",
@@ -18,13 +19,8 @@
   },
   "dependencies": {
     "@middy/core": "^3.4.0",
-    "@middy/http-cors": "^4.2.7",
     "@middy/http-json-body-parser": "^3.4.0",
-    "@middy/input-output-logger": "^4.2.7",
-    "aws-sdk": "^2.1335.0",
     "csv-parser": "^3.0.0",
-    "jest-aws-sdk-mock": "^1.0.2",
-    "strip-bom-stream": "^5.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -48,7 +44,6 @@
     "lint-staged": "^13.1.2",
     "prettier": "^2.8.4",
     "serverless": "^3.0.0",
-    "serverless-auto-swagger": "^2.12.0",
     "serverless-esbuild": "^1.23.3",
     "serverless-functions-base-path": "^1.0.33",
     "serverless-offline": "^12.0.4",

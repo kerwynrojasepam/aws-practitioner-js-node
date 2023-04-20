@@ -23,6 +23,11 @@ provider:
             - s3:*
           Resource:
             - "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource:
+            - Fn::ImportValue: SQSQueueOutput
 
 plugins:
   - serverless-esbuild
@@ -38,7 +43,7 @@ custom:
     define:
       require.resolve: undefined
     platform: node
-    concurrency: 10
+    concurrency: 1
 
 functions:
   importProductsFile:
@@ -52,6 +57,12 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            name: basicAuthorizer
+            type: token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+            arn: !ImportValue BasicAuthorizerLambdaArnId
 
   importFileParser:
     handler: src/functions/products/handler.importFileParser
@@ -63,3 +74,47 @@ functions:
             - prefix: uploaded/
           existing: true
 
+resources:
+  Resources:
+    BucketPolicyPublicRead:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: ${self:provider.environment.BUCKET_NAME}
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: AllowPublicRead
+              Effect: Allow
+              Principal: {
+                "AWS": "*"
+              }
+              Action: "s3:GetObject"
+              Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+
+    GatewayResponseAccessDenied:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+        ResponseType: "ACCESS_DENIED"
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+        ResponseType: "UNAUTHORIZED"
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+    MissingAuthToken:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+        ResponseType: "MISSING_AUTHENTICATION_TOKEN"
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"

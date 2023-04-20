@@ -1,4 +1,5 @@
-import { PRODUCTS_TABLE } from '@config/sls';
+import { SNS } from 'aws-sdk';
+import { CREATE_PRODUCT_TOPIC_ARN, PRODUCTS_TABLE } from '@config/sls';
 import { StockService } from '@services/stocks';
 import { BaseService } from '@services/BaseService';
 import { Product } from '@models/models.types';
@@ -68,4 +69,37 @@ export class ProductService extends BaseService<ProductDB> {
       throw new DBError(`[findByIdWithStock Error]: ${error?.message}`);
     }
   }
+
+  async publishProducts(products) {
+    return new Promise(() => {
+      const sns = new SNS();
+      const maxPrice = Math.max(...products.map(p => p.price));
+
+      console.log('publishProducts products', products);
+      console.log('publishProducts maxPrice', maxPrice);
+
+      const params = {
+        Subject: 'Products created',
+        MessageAttributes: {
+          price: {
+            DataType: 'Number',
+            StringValue: `${maxPrice}`
+          }
+        },
+        Message: JSON.stringify(products),
+        TopicArn: CREATE_PRODUCT_TOPIC_ARN
+      }
+
+      console.log('publishProducts params', params);
+
+      sns.publish(params, (error, response) => {
+        if (error) {
+          console.log('publishProducts function invoked with ERROR: ', error);
+          throw new Error(error.message);
+        } else {
+          console.log('publishProducts func invoke SUCCESSFULLY with DATA:', response);
+        }
+      });
+    });
+  };
 }

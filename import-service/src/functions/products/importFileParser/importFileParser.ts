@@ -1,12 +1,45 @@
+import { S3, SQS } from 'aws-sdk';
 import csv from 'csv-parser';
+import stripBom from 'strip-bom-stream';
 
 import { S3_FOLDERS } from '@constants/folders';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { getS3Client } from '@services/S3Client';
 import { ErrorMessage } from '@constants/errors';
+import { sendMessageToSQS } from '@libs/sendMessageToSQS';
+
+const createReadableStream = async (s3Client: S3, params: any) => {
+  return new Promise<void>(async (resolve, reject) => {
+    const object = await s3Client.getObject(params);
+    const products = [];
+    const sqs = new SQS({ apiVersion: '2012-11-05' });
+
+    const fileStream = await object.createReadStream();
+
+    fileStream
+      .pipe(stripBom())
+      .pipe(csv())
+      .on('data', async product => {
+        console.log('product', { product });
+        products.push(product);
+
+        console.log('[createReadableStream] CSV parsed file record', product);
+        const sqsResponse = await sendMessageToSQS(sqs, product);
+        console.log('sqsResponse', sqsResponse);
+      })
+      .on('end', () => {
+        console.log('createReadStream END', products);
+        resolve();
+      })
+      .on('error', error => {
+        console.log('createReadStream ERROR', error);
+        reject();
+      });
+  });
+};
 
 export const importFileParser = async event => {
-  console.log('importFileParser', event);
+  console.log('importFileParser-basicAuthorizer', event);
   const records = event?.Records;
   const s3Client = getS3Client();
 
@@ -20,9 +53,7 @@ export const importFileParser = async event => {
         Key: objectKey,
       };
 
-      const object = await s3Client.getObject(params);
-
-      object.createReadStream().pipe(csv()).on('data', console.log);
+      await createReadableStream(s3Client, params);
 
       await s3Client
         .copyObject({

@@ -1,2 +1,5 @@
 export const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
 export const STOCKS_TABLE = process.env.STOCKS_TABLE;
+export const CREATE_PRODUCT_TOPIC_ARN = process.env.CREATE_PRODUCT_TOPIC_ARN;
+
+console.log('CREATE_PRODUCT_TOPIC_ARN', CREATE_PRODUCT_TOPIC_ARN);
