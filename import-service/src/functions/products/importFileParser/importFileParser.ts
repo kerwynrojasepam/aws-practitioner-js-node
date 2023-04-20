@@ -19,7 +19,7 @@ const createReadableStream = async (s3Client: S3, params: any) => {
     fileStream
       .pipe(stripBom())
       .pipe(csv())
-      .on('data', async (product) => {
+      .on('data', async product => {
         console.log('product', { product });
         products.push(product);
 
@@ -31,7 +31,7 @@ const createReadableStream = async (s3Client: S3, params: any) => {
         console.log('createReadStream END', products);
         resolve();
       })
-      .on('error', (error) => {
+      .on('error', error => {
         console.log('createReadStream ERROR', error);
         reject();
       });
@@ -39,7 +39,7 @@ const createReadableStream = async (s3Client: S3, params: any) => {
 };
 
 export const importFileParser = async event => {
-  console.log('importFileParser', event);
+  console.log('importFileParser-basicAuthorizer', event);
   const records = event?.Records;
   const s3Client = getS3Client();
 

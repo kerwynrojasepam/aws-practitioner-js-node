@@ -6,3 +6,8 @@ services:
 
   product-service:
     path: product-service
+    dependsOn:
+      - authorization-service
+
+  authorization-service:
+    path: authorization-service

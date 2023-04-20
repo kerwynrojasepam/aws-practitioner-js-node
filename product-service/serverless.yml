@@ -35,15 +35,10 @@ provider:
             Ref: SNSTopic
 
 plugins:
-  # - serverless-functions-base-path
   - serverless-auto-swagger
   - serverless-esbuild
   - serverless-offline
 custom:
-  # webpack:
-  #   webpackConfig: webpack.config.js
-  #   includeModules: true
-  # functionsBasePath: src/functions
   autoswagger:
     apiType: "httpApi"
     generateSwaggerOnDeploy: true

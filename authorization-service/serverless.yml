@@ -1,0 +1,38 @@
+service: aws-pract-js-4-auth-service
+app: aws-pract-js-4-auth-service
+frameworkVersion: "3"
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-west-1
+  stage: dev
+  environment: ${file(.env.${opt:stage, self:provider.stage}.json)}
+  httpApi:
+    cors: true
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude:
+      - aws-sdk
+    target: node14
+    define:
+      require.resolve: undefined
+    platform: node
+    concurrency: 10
+
+functions:
+  basicAuthorizer:
+    handler: src/functions/authorization/handler.basicAuthorizer
+
+resources:
+  Outputs:
+    BasicAuthorizerLambdaArn:
+      Export:
+        Name: BasicAuthorizerLambdaArnId
+      Value: !GetAtt BasicAuthorizerLambdaFunction.Arn
